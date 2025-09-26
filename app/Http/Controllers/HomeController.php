@@ -4,31 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class PegawaiController extends Controller
+class HomeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data['name'] = "Joycelyn Dhealiva";
-        $data['my_age'] = 18;
-        $data['hobbies'] = ["Membaca", "Bermain", "Mendengar Musik", "Memasak", "Menggambar"];
-        $data['tgl_harus_wisuda'] = "2025-12-10";
-        $data['time_to_study_left'] = 243;
-        $data['current_semester'] = 3;
-        $data['future_goal'] = "UI/UX Designer";
+        /* Cara 1 */
+        $data ['username']        = 'Heroku';
+        $data ['last_login']      = date('Y-m-d H:i:s');
+        $data ['list_pendidikan'] = ['SD','SMP','SMA','S1','S2','S3'];
+        return view('home', $data );
 
-        if ($data['current_semester'] < 3) {
-            $data['info'] = "Masih Awal, Kejar TAK";
-        } else {
-            $data['info'] = "Jangan main-main, kurang-kurangi main game!";
-        }
+        // /* atau Cara 2 */
+        // $data = [
+	    //   'username'        => 'Heroku',
+	    //   'last_login'      => date('Y-m-d H:i:s'),
+	    //   'list_pendidikan' => ['SD', 'SMP', 'SMA', 'S1', 'S2', 'S3']];
+	    // return view('home', $data);
 
-        return view('pegawai', $data);
-    }
+	    // /* atau Cara 3 */
+	    // $username        = 'Heroku';
+	    // $last_login      = date('Y-m-d H:i:s');
+		// $list_pendidikan = ['SD', 'SMP', 'SMA', 'S1', 'S2', 'S3'];
+        // return view('home', compact('username', 'last_login', 'list_pendidikan'));
 
-
+}
 
     /**
      * Show the form for creating a new resource.
