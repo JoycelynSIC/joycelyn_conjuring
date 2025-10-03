@@ -15,7 +15,7 @@ class PegawaiController extends Controller
         $data['my_age'] = 18;
         $data['hobbies'] = ["Membaca", "Bermain", "Mendengar Musik", "Memasak", "Menggambar"];
         $data['tgl_harus_wisuda'] = "2025-12-10";
-        $data['time_to_study_left'] = 243;
+        $data['time_to_study_left'] = 123;
         $data['current_semester'] = 3;
         $data['future_goal'] = "UI/UX Designer";
 
