@@ -373,13 +373,15 @@
                                     <!-- First Name -->
                                     <div class="mb-3">
                                         <label for="first_name" class="form-label">First name</label>
-                                        <input type="text" name="first_name" id="first_name" class="form-control" required>
+                                        <input type="text" value="{{ old('first_name') }}" name="first_name" id="first_name" class="form-control"
+                                            required>
                                     </div>
 
                                     <!-- Last Name -->
                                     <div class="mb-3">
                                         <label for="last_name" class="form-label">Last name</label>
-                                        <input type="text" name="last_name" id="last_name" class="form-control" required>
+                                        <input type="text" value="{{ old('last_name') }}" name="last_name" id="last_name" class="form-control"
+                                            required>
                                     </div>
                                 </div>
 
@@ -387,13 +389,13 @@
                                     <!-- Birthday -->
                                     <div class="mb-3">
                                         <label for="birthday" class="form-label">Birthday</label>
-                                        <input type="date" name="birthday" id="birthday" class="form-control">
+                                        <input type="date" value="{{ old('birthday') }}" name="birthday" id="birthday" class="form-control">
                                     </div>
 
                                     <!-- Gender -->
                                     <div class="mb-3">
                                         <label for="gender" class="form-label">Gender</label>
-                                        <select id="gender" name="gender" class="form-select">
+                                        <select id="gender" value="{{ old('gender') }}" name="gender" class="form-select">
                                             <option value="">-- Pilih --</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
@@ -406,13 +408,14 @@
                                     <!-- Email -->
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="text" name="email" id="email" class="form-control" required>
+                                        <input type="text" value="{{ old('email') }}" name="email" id="email" class="form-control"
+                                            required>
                                     </div>
 
                                     <!-- Phone -->
                                     <div class="mb-3">
                                         <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" name="phone"id="phone" class="form-control">
+                                        <input type="text" value="{{ old('phone') }}" name="phone"id="phone" class="form-control">
                                     </div>
 
                                     <!-- Buttons -->
