@@ -16,7 +16,13 @@ class Pelanggan extends Model
         'gender',
         'email',
         'phone',
+        'fotos', // tambahkan ini
     ];
+
+    protected $casts = [
+    'fotos' => 'array',
+];
+
 
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
     {

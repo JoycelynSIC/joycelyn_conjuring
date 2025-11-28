@@ -52,4 +52,9 @@ Route::resource('pelanggan', PelangganController::class);
 
 Route::resource('user', UserController::class);
 
+Route::delete('/user/{id}/profile-picture', [UserController::class, 'destroyProfilePicture'])->name('user.destroyProfilePicture');
 
+Route::delete('/pelanggan/{id}/delete-file/{index}', [PelangganController::class, 'deleteFile'])->name('pelanggan.deleteFile');
+
+Route::delete('pelanggan/{id}/file/{index}', [PelangganController::class, 'deleteFile'])
+    ->name('pelanggan.file.destroy');

@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PelangganController extends Controller
 {
@@ -13,10 +14,12 @@ class PelangganController extends Controller
     {
         $searchableColumns = ['first_name', 'last_name', 'email', 'phone'];
         $filterableColumns = ['gender'];
+
         $data['dataPelanggan'] = Pelanggan::filter($request, $filterableColumns)
             ->search($request, $searchableColumns)
             ->paginate(10)
             ->onEachSide(2);
+
         return view('admin.pelanggan.index', $data);
     }
 
@@ -33,13 +36,16 @@ class PelangganController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
-        $data['first_name'] = $request->first_name;
-        $data['last_name']  = $request->last_name;
-        $data['birthday']   = $request->birthday;
-        $data['gender']     = $request->gender;
-        $data['email']      = $request->email;
-        $data['phone']      = $request->phone;
+        $data = $request->only(['first_name','last_name','birthday','gender','email','phone']);
+
+        // Handle multiple file upload
+        if ($request->hasFile('foto')) {
+            $fotos = [];
+            foreach ($request->file('foto') as $file) {
+                $fotos[] = $file->store('pelanggan', 'public');
+            }
+            $data['fotos'] = $fotos;
+        }
 
         Pelanggan::create($data);
 
@@ -47,11 +53,12 @@ class PelangganController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource (Detail Pelanggan).
      */
     public function show(string $id)
     {
-        //
+        $data['dataPelanggan'] = Pelanggan::findOrFail($id);
+        return view('admin.pelanggan.detail', $data);
     }
 
     /**
@@ -68,8 +75,7 @@ class PelangganController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $pelanggan_id = $id;
-        $pelanggan = Pelanggan::findOrFail($pelanggan_id);
+        $pelanggan = Pelanggan::findOrFail($id);
 
         $pelanggan->first_name = $request->first_name;
         $pelanggan->last_name  = $request->last_name;
@@ -78,7 +84,17 @@ class PelangganController extends Controller
         $pelanggan->email      = $request->email;
         $pelanggan->phone      = $request->phone;
 
+        // Handle new multiple file upload
+        if ($request->hasFile('foto')) {
+            $existingFotos = $pelanggan->fotos ?? [];
+            foreach ($request->file('foto') as $file) {
+                $existingFotos[] = $file->store('pelanggan', 'public');
+            }
+            $pelanggan->fotos = $existingFotos;
+        }
+
         $pelanggan->save();
+
         return redirect()->route('pelanggan.index')->with('success', 'Perubahan Data Berhasil!');
     }
 
@@ -88,7 +104,42 @@ class PelangganController extends Controller
     public function destroy(string $id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
+
+        // Hapus semua foto dari storage
+        if ($pelanggan->fotos && count($pelanggan->fotos) > 0) {
+            foreach ($pelanggan->fotos as $foto) {
+                if (Storage::disk('public')->exists($foto)) {
+                    Storage::disk('public')->delete($foto);
+                }
+            }
+        }
+
         $pelanggan->delete();
+
         return redirect()->route('pelanggan.index')->with('success', 'Data Berhasil Dihapus!');
     }
+
+    public function deleteFile($id, $index)
+{
+    $pelanggan = Pelanggan::findOrFail($id);
+
+    if(isset($pelanggan->fotos[$index])) {
+        $file = $pelanggan->fotos[$index];
+
+        // Hapus file dari storage
+        if(Storage::disk('public')->exists($file)){
+            Storage::disk('public')->delete($file);
+        }
+
+        // Hapus dari array fotos dan simpan
+        $fotos = $pelanggan->fotos;
+        array_splice($fotos, $index, 1);
+        $pelanggan->fotos = $fotos;
+        $pelanggan->save();
+    }
+
+    return redirect()->back()->with('success', 'File berhasil dihapus!');
+}
+
+
 }
