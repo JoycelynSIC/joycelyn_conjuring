@@ -22,6 +22,7 @@ class CreateFirstUser extends Seeder
                 'name' => 'Admin',
                 'email' => 'joycelyn@pcr.ac.id',
                 'password' => Hash::make('123456'),
+                'role' => 'super admin', 
                 'profile_picture' => null,
             ]);
         }
@@ -32,6 +33,7 @@ class CreateFirstUser extends Seeder
                 'name' => $faker->name(),
                 'email' => $faker->unique()->safeEmail(),
                 'password' => Hash::make('123456'),
+                'role' => $faker->randomElement(['pelanggan', 'mitra']), 
                 'profile_picture' => null,
             ]);
         }

@@ -41,6 +41,7 @@
                                 <th class="border-0">Foto</th>
                                 <th class="border-0">Nama Lengkap</th>
                                 <th class="border-0">Email</th>
+                                <th class="border-0">Role</th> 
                                 <th class="border-0">Password</th>
                                 <th class="border-0">Action</th>
                             </tr>
@@ -67,7 +68,10 @@
                                     {{-- EMAIL --}}
                                     <td>{{ $item->email }}</td>
 
-                                    {{-- PASSWORD HASH --}}
+                                    {{-- ROLE--}}
+                                    <td>{{ $item->role }}</td>
+
+                                    {{-- PASSWORD --}}
                                     <td>{{ $item->password }}</td>
 
                                     {{-- ACTION --}}
@@ -83,7 +87,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center">Belum ada user.</td>
+                                    <td colspan="6" class="text-center">Belum ada user.</td>
                                 </tr>
                             @endforelse
                         </tbody>

@@ -9,10 +9,9 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    // Tampilkan daftar user terbaru
+    // Tampilkan daftar user
     public function index()
     {
-        // Pastikan data terbaru tampil, paginate 5
         $dataUser = User::latest()->paginate(5);
         return view('admin.user.index', compact('dataUser'));
     }
@@ -30,6 +29,7 @@ class UserController extends Controller
             'name'            => 'required|string|max:255',
             'email'           => 'required|email|unique:users,email',
             'password'        => 'required|confirmed|min:6',
+            'role'            => 'required|in:super admin,pelanggan,mitra',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -42,10 +42,10 @@ class UserController extends Controller
             'name'            => $request->name,
             'email'           => $request->email,
             'password'        => Hash::make($request->password),
+            'role'            => $request->role,
             'profile_picture' => $path
         ]);
 
-        // Redirect ke index setelah tambah user
         return redirect()->route('user.index')->with('success', 'User berhasil ditambah');
     }
 
@@ -65,19 +65,23 @@ class UserController extends Controller
             'name'            => 'required|string|max:255',
             'email'           => 'required|email|unique:users,email,' . $id,
             'password'        => 'nullable|confirmed|min:6',
+            'role'            => 'required|in:super admin,pelanggan,mitra',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
+        // Ganti foto profil
         if ($request->hasFile('profile_picture')) {
             if ($user->profile_picture) {
                 Storage::disk('public')->delete($user->profile_picture);
             }
+
             $path = $request->file('profile_picture')->store('profile_pictures', 'public');
             $user->profile_picture = $path;
         }
 
-        $user->name = $request->name;
+        $user->name  = $request->name;
         $user->email = $request->email;
+        $user->role  = $request->role;
 
         if ($request->password) {
             $user->password = Hash::make($request->password);
@@ -88,7 +92,7 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'User berhasil diupdate');
     }
 
-    // Hapus foto profil user tanpa menghapus data
+    // Hapus foto profil
     public function destroyProfilePicture($id)
     {
         $user = User::findOrFail($id);
@@ -102,7 +106,7 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Profile picture berhasil dihapus');
     }
 
-    // Hapus user beserta foto profil
+    // Hapus user
     public function destroy($id)
     {
         $user = User::findOrFail($id);

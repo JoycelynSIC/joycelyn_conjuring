@@ -46,19 +46,34 @@
 
 
                             {{-- Row Input --}}
-                            <div class="row">
-                                {{-- Kolom Kiri: Nama & Email --}}
+                            <div class="row mt-4">
+                                {{-- Kolom Kiri: Nama, Email, Role --}}
                                 <div class="col-md-6 mb-3">
                                     <div class="mb-3">
                                         <label class="form-label">Nama Lengkap</label>
                                         <input type="text" name="name" class="form-control"
                                             value="{{ old('name', $user->name) }}" required>
                                     </div>
+
                                     <div class="mb-3">
                                         <label class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control"
                                             value="{{ old('email', $user->email) }}" required>
                                     </div>
+
+                                    {{-- Tambahan Input Role --}}
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label">Role</label>
+                                        <select name="role" class="form-control">
+                                            <option value="super admin" {{ $user->role == 'super admin' ? 'selected' : '' }}>
+                                                Super Admin</option>
+                                            <option value="pelanggan" {{ $user->role == 'pelanggan' ? 'selected' : '' }}>
+                                                Pelanggan</option>
+                                            <option value="mitra" {{ $user->role == 'mitra' ? 'selected' : '' }}>Mitra
+                                            </option>
+                                        </select>
+                                    </div>
+
                                 </div>
 
                                 {{-- Kolom Kanan: Password --}}
